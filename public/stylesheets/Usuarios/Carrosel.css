@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh; 
+    padding: 70px 20px 20px 20px;  
+    overflow-y: auto;  
+}
+
+
+header {
+    background-color: #3498db;  
+    width: 100%;  
+    padding: 30px 0;  
+    display: flex;
+    justify-content: center;  
+    align-items: center;    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    z-index: 1000;  
+}
+
+
+.carrosel {
+    margin-top: 90px;
+    position: relative;
+    width: 95%;
+    max-width: 800px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.carrosel-imagens {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.carrosel-imagens img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.carrosel-imagens img:hover {
+    transform: scale(1.3);
+}
+
+/* Estilos para o carrossel de catálogo */
+
+.carrosel2 {
+    margin-top: 20px;
+    position: relative;
+    width: 95%;
+    max-width: 800px;
+    height: 300px;  
+    overflow-y: scroll; 
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.carrosel2::-webkit-scrollbar {
+    display: none;
+}
+
+.carrosel2-imagens2 {
+    display: flex;
+    flex-direction: column; 
+    height: auto;
+}
+
+.carrosel2-imagens2 img {
+    width: 100%;  
+    height: 100%;  
+    object-fit: cover; 
+    margin-bottom: 10px;  
+}
+
+/* Estilos específicos para telas de computador (largura maior que 480px) */
+@media (min-width: 480px) {
+    .carrosel {
+        max-width: 1000px; 
+        height: 250px;  
+    }
+
+    .carrosel2 {
+        max-width: 500px; 
+        height: 700px; 
+    }
+
+    
+
+}
+
+/* Seção de específicos */
+.especificos {
+    justify-content: flex-start;
+    margin-top: 20px;
+    width: 100%;
+    overflow-x: scroll; 
+    white-space: nowrap; 
+    display: flex;
+    padding: 10px 0;
+    scrollbar-width: none; 
+  }
+  
+  .especificos::-webkit-scrollbar {
+    display: none; 
+  }
+  
+  .especificos-container {
+    display: flex;
+    gap: 20px; 
+  }
+  
+  .especificos-item {
+    text-align: center;
+    flex-shrink: 0; 
+    width: 100px;
+    cursor: pointer; 
+    transition: transform 0.3s ease;
+  }
+
+  .especificos-item:hover {
+    transform: scale(1.1); 
+  }
+  
+  .especificos-item img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; 
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .especificos-item p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+
+@media (min-width: 720px) {
+    .especificos {
+      justify-content: center; 
+    }
+  }
+  
+/* Aqui é o estilo para o carrinho*/
+
+.carrinho-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    transition: transform 0.9s ease;
+}
+
+.carrinho-container:hover {
+    background-color: #ccc;
+    transform: scale(1.1);
+}
