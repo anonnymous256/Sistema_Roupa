@@ -4,17 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/stylesheets/Usuarios/Carrosel.css">
+  <link rel="stylesheet" href="/stylesheets/Usuarios/index.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <title>Document</title>
 </head>
 
 <body>
-  <header>
-    <h1>Sistema de Varejo</h1>
-    <!-- Botão Carrinho-->
+  <header> 
+    <div class="logo">
+      <img src="/images/imagensteste (1).jpg" alt="Logo">
+    </div>
+    <h1>Loja de Varejo</h1>
+    <div class="logar">
+      <!-- Botão personalizado -->
+      <button class="btn-logar">Logar</button>
+    </div>
+    <!-- Botão Carrinho -->
     <div class="carrinho-container">
-      <i class="fas fa-shopping-cart"></i>
+      <i class="fas fa-bag-shopping"></i>
     </div>
   </header>
 
@@ -30,46 +37,48 @@
 
 
  <!-- Bolas específicas -->
+  <h2>Categorias</h2>
 <div class="especificos">
   <div class="especificos-container">
     <div class="especificos-item">
       <img src="/images/imagensteste (1).jpg" alt="Calcados">
-      <p>Calcados</p>
+      <p>Masculino</p>
     </div>
     <div class="especificos-item">
       <img src="/images/imagensteste (2).jpg" alt="Esportes">
-      <p>Esportes</p>
+      <p>Feminino</p>
     </div>
     <div class="especificos-item">
       <img src="/images/imagensteste (3).jpg" alt="Acessorios">
-      <p>Acessorios</p>
+      <p>Acessórios</p>
     </div>
     <div class="especificos-item">
       <img src="/images/imagensteste (4).jpg" alt="Moda">
-      <p>Moda</p>
-    </div>
-    <div class="especificos-item">
-      <img src="/images/imagensteste (4).jpg" alt="Moda">
-      <p>novidades</p>
-    </div>
-    <div class="especificos-item">
-      <img src="/images/imagensteste (4).jpg" alt="Moda">
-      <p>Beleza</p>
+      <p>Calçados</p>
     </div>
   </div>
 </div>
 
 
   <!-- Carrosel Catálogo-->
-  <div class="carrosel2">
-    <div class="carrosel2-imagens2">
-      <img src="/images/imagensteste (1).jpg" alt="imagem 4">
-      <img src="/images/imagensteste (2).jpg" alt="imagem 1">
-      <img src="/images/imagensteste (3).jpg" alt="imagem 2">
-      <img src="/images/imagensteste (4).jpg" alt="imagem 3">
-    </div>
+<h2>Catálogo</h2>
+<div class="carrosel2">
+  <div class="seta-esquerda"><i class="fas fa-chevron-left"></i></div>
+  <div class="carrosel2-imagens2">
+    <img src="/images/imagensteste (1).jpg" alt="imagem 4">
+    <img src="/images/teste2 (1).jpg" alt="imagem 1">
+    <img src="/images/teste2 (2).jpg" alt="imagem 2">
+    <img src="/images/teste2 (1).jpg" alt="imagem 3">
   </div>
+  <div class="seta-direita"><i class="fas fa-chevron-right"></i></div>
+</div>
 
+
+  <footer>
+    <p>&copy; 2025 Sua Empresa. Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="/javascripts/Usuarios/Carrosel2.js"></script>
   <script src="/javascripts/Usuarios/Carrosel.js"></script>
 </body>
 
