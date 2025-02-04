@@ -2,14 +2,9 @@
   "name": "varejo",
   "version": "0.0.0",
   "private": true,
-  "main": "app.js",
-  "type": "module",
-  "engines": {
-    "node": "22.x"},
   "scripts": {
-  "start": "node app.js",
-  "vercel-start": "node app.js"
-},
+    "start": "node ./bin/www"
+  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
