@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Administrador</title>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="/stylesheets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .AdicionarItem {
+            justify-content: center;
+            background: none;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: 800;
+            border: var(--important-color) 2px solid;
+            cursor: pointer;
+            transition: 0.5s;
+            color: var(--important-color);
+        }
+
+        .AdicionarItem:hover {
+            transition: 0.5s;
+            box-shadow: 0px 100px 0px 0px inset var(--important-color);
+            color: var(--background-color);
+        }
+
+        .catalogue-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            scroll-snap-type: x mandatory;
+        }
+
+        .item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            text-align: center;
+            scroll-snap-align: start;
+        }
+
+        .item img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header" class="container header">
+        <nav class="menu nav">
+            <div class="divDaLogo">
+                <img src="/images/Logo-Ecommerce/logo_vermelha.png" alt="logo" class="logoEcommerce"
+                    onclick="window.location.replace('/index')">
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Adicionar Item</h2>
+        <input type="text" id="itemNome" placeholder="Nome do Item">
+        <input type="number" id="itemPreco" placeholder="Preço">
+        <input type="file" id="itemImagem" accept="image/*">
+        <button id="btnAdicionar" class="AdicionarItem">Adicionar</button>
+        <h2>Lista de Itens</h2>
+
+        <div id="catalogue-container" class="catalogue-container">
+            <!-- Itens carregados dinamicamente aparecerão aqui -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB1f7kB01rCSsQ3BKm60hR5itzdomaZFsk",
+    authDomain: "agenda-1881a.firebaseapp.com",
+    projectId: "agenda-1881a",
+    storageBucket: "agenda-1881a.appspot.com",
+    messagingSenderId: "1094390815503",
+    appId: "1:1094390815503:web:84a34c983510c89ea07c7a",
+    measurementId: "G-HXEGCEG53L"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Variáveis globais
+let currentUserId = null;
+
+// Verificar se o usuário está logado
+onAuthStateChanged(auth, user => {
+    if (user) {
+        currentUserId = user.uid;
+        carregarItens();
+    } else {
+        currentUserId = null;
+        alert("Você não está logado!");
+        window.location.replace("/login");  // Redirecionar para a página de login se não estiver logado
+    }
+});
+
+document.getElementById("btnAdicionar").addEventListener("click", adicionarItem);
+
+// Função para adicionar item
+async function adicionarItem() {
+    const nome = document.getElementById('itemNome').value;
+    const preco = document.getElementById('itemPreco').value;
+    const file = document.getElementById('itemImagem').files[0];
+
+    if (file && currentUserId) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async function () {
+            const imagemBase64 = reader.result;
+            try {
+                // Salvar o item na coleção "itens" do usuário logado
+                await addDoc(collection(db, "usuarios", currentUserId, "itens"), {
+                    nome, preco, imagem: imagemBase64
+                });
+                Swal.fire("Item adicionado!", "", "success");
+                carregarItens();  // Atualiza a lista de itens
+            } catch (error) {
+                console.error("Erro ao adicionar item: ", error);
+            }
+        };
+    } else {
+        Swal.fire("Erro", "Preencha todos os campos corretamente", "error");
+    }
+}
+
+// Função para carregar itens específicos do usuário logado
+async function carregarItens() {
+    const catalogueContainer = document.getElementById("catalogue-container");
+    catalogueContainer.innerHTML = "";
+
+    if (currentUserId) {
+        try {
+            // Consultar os itens do usuário logado
+            const q = query(collection(db, "usuarios", currentUserId, "itens"));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                catalogueContainer.innerHTML += `
+                    <div class="item">
+                        <img src="${data.imagem}" alt="Imagem">
+                        <div>
+                            <h1>${data.nome}</h1>
+                            <h4>R$ ${data.preco}</h4>
+                            <button class="btn-all" onclick="editarItem('${docSnap.id}', '${data.nome}', '${data.preco}', '${data.imagem}') ">Editar</button>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error("Erro ao carregar itens: ", error);
+        }
+    }
+}
+
+// Função para editar item
+window.editarItem = async function (id, nome, preco, imagem) {
+    const { value: formValues } = await Swal.fire({
+        title: 'Editar Item',
+        html:
+            `<input id="nomeInput" class="swal2-input" placeholder="Nome" value="${nome}">
+            <input id="precoInput" class="swal2-input" placeholder="Preço" value="${preco}">
+            <input type="file" id="imagemInput" class="swal2-input" accept="image/*">
+            <img src="${imagem}" alt="Imagem atual" style="max-width: 100px; margin-top: 10px;">`,
+        focusConfirm: false,
+        preConfirm: () => {
+            return [
+                document.getElementById('nomeInput').value,
+                document.getElementById('precoInput').value,
+                document.getElementById('imagemInput').files[0]
+            ];
+        }
+    });
+
+    if (formValues) {
+        const [novoNome, novoPreco, novoFile] = formValues;
+        if (novoNome && novoPreco) {
+            let novaImagem = imagem;
+            if (novoFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(novoFile);
+                reader.onload = async function () {
+                    novaImagem = reader.result;
+                    try {
+                        // Atualizar item no banco de dados
+                        await updateDoc(doc(db, "usuarios", currentUserId, "itens", id), {
+                            nome: novoNome,
+                            preco: novoPreco,
+                            imagem: novaImagem
+                        });
+                        Swal.fire("Item atualizado!", "", "success");
+                        carregarItens();
+                    } catch (error) {
+                        console.error("Erro ao atualizar item: ", error);
+                    }
+                };
+            } else {
+                try {
+                    await updateDoc(doc(db, "usuarios", currentUserId, "itens", id), {
+                        nome: novoNome,
+                        preco: novoPreco,
+                        imagem: novaImagem
+                    });
+                    Swal.fire("Item atualizado!", "", "success");
+                    carregarItens();
+                } catch (error) {
+                    console.error("Erro ao atualizar item: ", error);
+                }
+            }
+        }
+    }
+}
+
+// Carregar itens ao iniciar
+document.addEventListener("DOMContentLoaded", carregarItens);
+
+    </script>
+</body>
+
+</html>
